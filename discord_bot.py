@@ -2,6 +2,7 @@ import discord
 import re,os
 import setproctitle
 import emoji
+import configparser
 
 import Actions
 import ManageActions
@@ -10,6 +11,8 @@ import common_lib.PriDb as PriDb
 
 
 client = discord.Client()
+config = configparser.ConfigParser()
+config.read('./secret/config.ini')
 
 BOT_TOKEN  = os.getenv("DISCORD_BOT_TOKEN", "")
 
@@ -20,13 +23,20 @@ def remove_emoji(src_str):
 
 @client.event
 async def on_member_join(member):
-    server = member.server
-    channel = discord.utils.get(server.channels, name='雑談総合', type=discord.ChannelType.text)
+    for section in config.sections():
+        if member.server.id == config[section]['server_id']:
 
-    if channel is not None:
-        here = os.path.join(os.path.dirname(os.path.abspath(__file__)))
-        filepath = here + '/static/priconne/invite.jpg'
-        await client.send_file(channel, filepath, content='みなさーん！新しい仲間が来ましたよー！！')
+            channel = discord.utils.get(member.server.channels, name='雑談総合', type=discord.ChannelType.text)
+
+            if channel is not None:
+                here = os.path.join(os.path.dirname(os.path.abspath(__file__)))
+                filepath = here + '/static/priconne/invite.jpg'
+                await client.send_file(channel, filepath, content='みなさーん！新しい仲間が来ましたよー！！')
+
+                if section == 'OREKISHI':
+                    role = discord.utils.get(member.server.roles, name='騎士くん')
+                    await client.add_roles(member, role)
+
 
 
 @client.event
