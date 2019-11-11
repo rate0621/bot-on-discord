@@ -124,7 +124,7 @@ class Actions:
             last_stamp_time = datetime.strptime(s, '%Y/%m/%d %H:%M:%S')
 
     now = datetime.now()
-    if (now - last_stamp_time).total_seconds() >= 500:
+    if (now - last_stamp_time).total_seconds() >= 3600:
       for word_list in Pri.responses:
         for word in word_list.split(','):
           if re.search(word, req.content):
