@@ -51,7 +51,7 @@ async def on_ready():
 async def on_message(message):
 
     # botへのメンションのときの動作(主に管理者用)
-    if client.user.id in message.content:
+    if str(client.user.id) in message.content:
         mact = ManageActions.ManageActions()
         mact.check_and_action(message)
 
@@ -76,16 +76,16 @@ async def on_message(message):
             act = Actions.Actions()
             res_type, res = act.check_and_response(message)
 
-    #    for i in client.get_all_emojis():
-    #      print (i)
+#            for i in client.emojis:
+#                print (type(i))
 
             if res_type == 'file':
-                await client.send_file(message.channel, res)
+                await message.channel.send(file=discord.File(res,))
             if res_type == 'text':
-                await client.send_message(message.channel, res)
+                await message.channel.send(res)
             if res_type == 'emoji':
                 for e in res:
-                    await client.add_reaction(message, e)
+                    await message.add_reaction(e)
 
 
 # プロセス名設定
