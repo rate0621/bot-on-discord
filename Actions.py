@@ -9,6 +9,8 @@ import common_lib.priconne_gacha_simulator.ImageGenerator  as ImageGenerator
 import common_lib.Common as Common
 import response.Priconne as Pri
 
+import rate_twitter_tools.twitter_tools as TwitterTools
+
 
 #ServiceAccountCredentials：Googleの各サービスへアクセスできるservice変数を生成します。
 from oauth2client.service_account import ServiceAccountCredentials
@@ -111,6 +113,13 @@ class Actions:
 
       return self.res_type, self.res
 
+    elif re.match("^マルコフ\s(.+)$", req.content):
+      self.res_type = 'text'
+      self.res      = self.markov(req.content)
+
+      return self.res_type, self.res
+
+
     # スタンプ系はこの下に記述していく
 
     # 連続でスタンプがでまくるとログが流れてしまったりと鬱陶しいので、
@@ -192,6 +201,17 @@ class Actions:
     challenge_count, message = gs.challenge(chara_name)
 
     return message
+
+
+  def markov(self, text):
+    match = re.search("^マルコフ\s(.+)$", text)
+    twi_id = match.group(1)
+
+    tt = TwitterTools.TwitterTools()
+    markof_text = tt.tweet_markov_from_specific_user(twi_id)
+
+    return markof_text
+
 
   def have_characters(self, target_user):
     #2つのAPIを記述しないとリフレッシュトークンを3600秒毎に発行し続けなければならない
