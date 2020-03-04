@@ -4,3 +4,6 @@
 [submodule "common_lib/priconne_gacha_simulator"]
 	path = common_lib/priconne_gacha_simulator
 	url = https://rate0621@github.com/rate0621/priconne-gacha-simulator.git
+[submodule "rate_twitter_tools"]
+	path = rate_twitter_tools
+	url = https://github.com/rate0621/bot-on-twitter.git
