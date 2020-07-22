@@ -23,19 +23,6 @@ class Actions:
   def check_and_response(self, req):
     here = os.path.join( os.path.dirname(os.path.abspath(__file__)))
 
-
-    # スタンプを返す系以外のは初めにチェックする
-    # おれ騎士、凸報告部屋
-    if req.channel.id == '497391628831555584':
-      JST = timezone(timedelta(hours=+9), 'JST')
-      now = datetime.now(JST).strftime('%Y/%m/%d %H:%M:%S')
-      if datetime.now(JST).strftime('%Y/%m/%d 03:00:00') <= now <= datetime.now(JST).strftime('%Y/%m/%d 04:59:59'):
-        self.res_type = 'file'
-        self.res      = here + "/static/priconne/amesu2/yohuke.png"
-
-        return self.res_type, self.res
-
-
     # アメス教徒のチャンネルID
     #if req.channel.id == '504911147280105475': # 開発用
     # NOTE:
@@ -150,18 +137,8 @@ class Actions:
       self.res_type = 'emoji'
       self.res      = ['you:478527842855026698', 'jo:478527811296952330']
 
-      ## 507788854418210826 ペコ
-      if re.match('507788854418210826', req.author.id):
-        self.res_type = 'emoji'
-        self.res      = ['tuho:478871148134924309']
-
       return self.res_type, self.res
 
-    if re.match('454636015785869313', req.author.id):
-      self.res_type = 'text'
-      self.res      = '(´^ω^｀)ﾌﾞﾌｫwww'
-
-      return self.res_type, self.res
 
 
     return self.res_type, self.res
