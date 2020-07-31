@@ -49,9 +49,9 @@ async def on_member_join(member):
                     await channel.send("まずはこちらの板のほうを確認お願いしてくださいね！\n" + look_channel.mention + "\n もしクランや鯖についてなにかわからないことがあったら。\n" + client.get_user(OWNER).mention + "に連絡してください。")
 
                     #role = discord.utils.get(member.guild.roles, name='騎士くん')
-                    role = member.guild.get_role(OREKISHI_ROLE_ID)
-                    if role is not None:
-                        await member.add_roles(role)
+                    #role = member.guild.get_role(OREKISHI_ROLE_ID)
+                    #if role is not None:
+                    #    await member.add_roles(role)
 
 
 
