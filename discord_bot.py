@@ -14,29 +14,60 @@ client = discord.Client()
 config = configparser.ConfigParser()
 config.read('./secret/config.ini')
 
-BOT_TOKEN  = os.getenv("DISCORD_BOT_TOKEN", "")
+BOT_TOKEN           = os.getenv("DISCORD_BOT_TOKEN", "")
+OWNER               = int(os.getenv("DISCO_SERVER_OWNER", ""))
+FIRST_LOOK_CHANNEL  = int(os.getenv("FIRST_LOOK_CHANNEL_ID", ""))
+FIRST_LOOK_MESSAGE  = int(os.getenv("FIRST_LOOK_MESSAGE_ID", ""))
+OREKISHI_ROLE_ID    = int(os.getenv("OREKISHI_ROLE_ID", ""))
+OREKISHI_ROLE_EMOJI = int(os.getenv("OREKISHI_ROLE_EMOJI_ID", ""))
+TOWA_ROLE_ID        = int(os.getenv("TOWA_ROLE_ID", ""))
+TOWA_ROLE_EMOJI     = int(os.getenv("TOWA_ROLE_EMOJI_ID", ""))
 
 def remove_emoji(src_str):
     return ''.join(c for c in src_str if c not in emoji.UNICODE_EMOJI)
 
 
+@client.event
+async def on_member_join(member):
+    for section in config.sections():
+        if str(member.guild.id) == config[section]['server_id']:
 
-#@client.event
-#async def on_member_join(member):
-#    for section in config.sections():
-#        if member.server.id == config[section]['server_id']:
-#
-#            channel = discord.utils.get(member.server.channels, name='雑談総合', type=discord.ChannelType.text)
-#
-#            if channel is not None:
-#                here = os.path.join(os.path.dirname(os.path.abspath(__file__)))
-#                filepath = here + '/static/priconne/invite.jpg'
-#                await client.send_file(channel, filepath, content='みなさーん！新しい仲間が来ましたよー！！')
-#
-#                if section == 'OREKISHI':
-#                    role = discord.utils.get(member.server.roles, name='騎士くん')
-#                    await client.add_roles(member, role)
+            channel = discord.utils.get(member.guild.channels, name='雑談総合', type=discord.ChannelType.text)
 
+            if channel is not None:
+                here = os.path.join(os.path.dirname(os.path.abspath(__file__)))
+                filepath = here + '/static/priconne/invite.jpg'
+                file_image = discord.File(filepath)
+                await channel.send(file=file_image, content='みなさーん！新しい仲間が来ましたよー！！')
+
+                if section == 'OREKISHI':
+                #if section == 'RATE-DEV':
+
+                    look_channel = client.get_channel(FIRST_LOOK_CHANNEL)
+                    user = client.get_user(OWNER)
+
+                    await channel.send("まずはこちらの板のほうを確認お願いしてくださいね！\n" + look_channel.mention + "\n もしクランや鯖についてなにかわからないことがあったら。\n" + client.get_user(OWNER).mention + "に連絡してください。")
+
+                    #role = discord.utils.get(member.guild.roles, name='騎士くん')
+                    role = member.guild.get_role(OREKISHI_ROLE_ID)
+                    if role is not None:
+                        await member.add_roles(role)
+
+
+
+@client.event
+async def on_raw_reaction_add(payload):
+    if payload.message_id == FIRST_LOOK_MESSAGE:
+        checked_emoji = payload.emoji.id
+
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
+        if checked_emoji == OREKISHI_ROLE_EMOJI:
+            role = guild.get_role(OREKISHI_ROLE_ID)
+            await payload.member.add_roles(role)
+        elif checked_emoji == TOWA_ROLE_EMOJI:
+            role = guild.get_role(TOWA_ROLE_ID)
+            await payload.member.add_roles(role)
 
 
 @client.event
