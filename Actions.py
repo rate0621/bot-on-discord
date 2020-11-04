@@ -29,7 +29,7 @@ class Actions:
     # 497625108387594250 <-おれきし
     # 562570171173175296 <-青鯖
 
-    if req.channel.id in ('497625108387594250', '562570171173175296'):
+    if str(req.channel.id) in ('497625108387594250', '562570171173175296'):
       if re.search('アメス', req.content):
 #        files = os.listdir(here + "/static/priconne/amesu/")
 #

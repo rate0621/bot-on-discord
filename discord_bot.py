@@ -10,7 +10,9 @@ import ManageActions
 import common_lib.PriDb as PriDb
 
 
-client = discord.Client()
+intents = discord.Intents(messages=True, guilds=True, members=True)
+client = discord.Client(intents=intents)
+
 config = configparser.ConfigParser()
 config.read('./secret/config.ini')
 
