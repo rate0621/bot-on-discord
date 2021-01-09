@@ -10,7 +10,7 @@ import ManageActions
 import common_lib.PriDb as PriDb
 
 
-intents = discord.Intents(messages=True, guilds=True, members=True)
+intents = discord.Intents(messages=True, guilds=True, members=True, reactions=True)
 client = discord.Client(intents=intents)
 
 config = configparser.ConfigParser()
@@ -70,6 +70,23 @@ async def on_raw_reaction_add(payload):
         elif checked_emoji == TOWA_ROLE_EMOJI:
             role = guild.get_role(TOWA_ROLE_ID)
             await payload.member.add_roles(role)
+
+@client.event
+async def on_raw_reaction_remove(payload):
+    if payload.message_id == FIRST_LOOK_MESSAGE:
+        checked_emoji = payload.emoji.id
+
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
+        if checked_emoji == OREKISHI_ROLE_EMOJI:
+            role = guild.get_role(OREKISHI_ROLE_ID)
+            member = guild.get_member(payload.user_id)
+            await member.remove_roles(role)
+        elif checked_emoji == TOWA_ROLE_EMOJI:
+            role = guild.get_role(TOWA_ROLE_ID)
+            member = guild.get_member(payload.user_id)
+            await member.remove_roles(role)
+
 
 
 @client.event
