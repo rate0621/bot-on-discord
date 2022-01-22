@@ -7,7 +7,8 @@ import configparser
 import Actions
 import ManageActions
 
-import common_lib.PriDb as PriDb
+import common_lib.PriDb  as PriDb
+import common_lib.Common as Common
 
 
 intents = discord.Intents(messages=True, guilds=True, members=True, reactions=True)
@@ -24,6 +25,7 @@ OREKISHI_ROLE_ID    = int(os.getenv("OREKISHI_ROLE_ID", ""))
 OREKISHI_ROLE_EMOJI = int(os.getenv("OREKISHI_ROLE_EMOJI_ID", ""))
 TOWA_ROLE_ID        = int(os.getenv("TOWA_ROLE_ID", ""))
 TOWA_ROLE_EMOJI     = int(os.getenv("TOWA_ROLE_EMOJI_ID", ""))
+TEXT_CHALLENGE_EMOJI_ID = int(os.getenv("TEXT_CHALLENGE_EMOJI_ID", ""))
 
 def remove_emoji(src_str):
     return ''.join(c for c in src_str if c not in emoji.UNICODE_EMOJI)
@@ -70,6 +72,14 @@ async def on_raw_reaction_add(payload):
         elif checked_emoji == TOWA_ROLE_EMOJI:
             role = guild.get_role(TOWA_ROLE_ID)
             await payload.member.add_roles(role)
+
+    if payload.emoji.id == TEXT_CHALLENGE_EMOJI_ID:
+        target_message = await client.get_channel(int(payload.channel_id)).fetch_message(payload.message_id)
+        com = Common.Common()
+        s = com.textChallenge(target_message.content)
+        await target_message.reply(content=s)
+        #await message.channel.send(res)
+
 
 @client.event
 async def on_raw_reaction_remove(payload):

@@ -6,7 +6,7 @@ bs4==0.0.1
 certifi==2018.10.15
 chardet==3.0.4
 configparser==4.0.2
-discord.py==1.5.1
+discord.py==1.7.3
 emoji==0.5.2
 gspread==3.0.1
 gunicorn==19.9.0
