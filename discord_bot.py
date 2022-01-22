@@ -81,6 +81,16 @@ async def on_raw_reaction_add(payload):
         #await message.channel.send(res)
 
 
+    translate_dict = {
+        934356916484849706: 'EN'
+    }
+    if payload.emoji.id in translate_dict.keys():
+        target_message = await client.get_channel(int(payload.channel_id)).fetch_message(payload.message_id)
+        com = Common.Common()
+        translate_result = com.translateText(target_message.content, translate_dict[payload.emoji.id])
+        await target_message.reply(content=translate_result['translations'][0]['text'])
+
+
 @client.event
 async def on_raw_reaction_remove(payload):
     if payload.message_id == FIRST_LOOK_MESSAGE:

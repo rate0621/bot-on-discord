@@ -51,7 +51,7 @@ class Common():
         )
 
         d = json.loads(response.text)
-        print (d)
+        return d
 
 if __name__ == "__main__":
   args = sys.argv
