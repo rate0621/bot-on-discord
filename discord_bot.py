@@ -82,7 +82,9 @@ async def on_raw_reaction_add(payload):
 
 
     translate_dict = {
-        934356916484849706: 'EN'
+        934356916484849706: 'EN',
+        935108780616736808: 'JA',
+        935110924342276186: 'DE'
     }
     if payload.emoji.id in translate_dict.keys():
         target_message = await client.get_channel(int(payload.channel_id)).fetch_message(payload.message_id)
